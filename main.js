@@ -1,5 +1,5 @@
-import * as twgl from '/node_modules/twgl.js/dist/4.x/twgl-full.module.js';
-import * as dat from '/node_modules/dat.gui/build/dat.gui.module.js';
+import * as twgl from '/twgl-full.module.js';
+import * as dat from '/dat.gui.module.js';
 
 const gui = new dat.GUI({name: "Cool Editor"});
 createBrushUI(gui);
