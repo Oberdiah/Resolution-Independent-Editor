@@ -1,9 +1,9 @@
 let lastMousePos = {x: -1, y: -1};
 let brushSettings = {
     "Brush Size": 30,
-    "Brush Weight": 0.9,
+    "Brush Weight": 1.9,
     "Brush Opacity": 1.0,
-    "Brush Color": [0, 128, 255],
+    "Brush Color": [255, 255, 255],
 };
 
 function createBrushUI(ui) {
@@ -45,7 +45,7 @@ function brush() {
             for (let i = 0; i < 2; i++) {
                 buffBrushPoint(mousePos);
             }
-            megaBuf[megaBufPos] = BRUSH_FINISH+0x7fffffff; // Sneakily add an end on the end
+            sneakBuffInt(BRUSH_FINISH); // Sneakily add an end on the end
             setTo(lastMousePos, mousePos);
         } else {
             let distBetween = dist(mousePos, lastMousePos);
@@ -55,10 +55,8 @@ function brush() {
                 lastMousePos = add(lastMousePos, step);
                 distBetween -= stepDist;
                 buffBrushPoint(lastMousePos);
-                megaBuf[megaBufPos] = BRUSH_FINISH+0x7fffffff; // Sneakily add an end on the end
+                sneakBuffInt(BRUSH_FINISH); // Sneakily add an end on the end
             }
-
-            //console.log(megaBufPos);
         }
     }
 
@@ -66,5 +64,6 @@ function brush() {
     if (!mouseDown && mouseWasDown) {
         buffBrushFinish();
         lastMousePos.x = -1;
+        safeToCache = true;
     }
 }

@@ -8,11 +8,14 @@ precision mediump usampler2D;
 #define BRUSH_FINISH 30
 // ### End Modes ###
 
+uniform sampler2D u_background;
 uniform usampler2D u_samp;
 
 uniform vec2 resolution;
 uniform vec2 mouseLocation;
 uniform float time;
+uniform uint buffStartPos;
+uniform bool queryTexture;
 
 out vec4 colorOut;
 
@@ -99,12 +102,16 @@ void main() {
   vec2 pix = vec2(gl_FragCoord.xy);
   vec2 mouseLoc = vec2(mouseLocation * resolution);
 
-  vec4 color = vec4( 0, 0, 0, 1 );
+  vec4 color = texelFetch(u_background, ivec2(pix), 0);
   float gridSize = 10.0;
 
-  // Checkerboard
-  if (mod(floor(pix / gridSize).x + floor(pix / gridSize).y, 2.0) < 1.0) {
-    color = vec4(0.1, 0.1, 0.1, 1);
+  if (color.a == 0.0) {
+    // Checkerboard
+    if (mod(floor(pix / gridSize).x + floor(pix / gridSize).y, 2.0) < 1.0) {
+      color = vec4(0.1, 0.1, 0.1, 1);
+    } else {
+      color = vec4(0.0, 0.0, 0.0, 1);
+    }
   }
 
   // Stripes
@@ -112,10 +119,9 @@ void main() {
 //    color = vec4(0.1, 0.1, 0.1, 1);
 //  }
 
-
   ivec2 size = textureSize(u_samp, 0);
 
-  uint buffLoc = 0u;
+  uint buffLoc = buffStartPos;
   while (true) {
     int val = igetBuff(buffLoc++);
     if (val == BRUSH_POINT) {
@@ -129,10 +135,5 @@ void main() {
     }
   }
 
-  if (length(vec2(pix - mouseLoc)) < 5.0) {
-    color.g = 1.0;
-  }
-
-  color.a = 1.0;
   colorOut = color;
 }

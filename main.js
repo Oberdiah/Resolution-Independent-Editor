@@ -5,6 +5,7 @@ const gui = new dat.GUI({name: "Cool Editor"});
 createBrushUI(gui);
 
 const frag = await (await fetch('frag.fs')).text();
+const simpleFrag = await (await fetch('UIFrag.fs')).text();
 const vert = await (await fetch('vert.vs')).text();
 
 const startText = "// ### Modes ###";
@@ -25,49 +26,100 @@ const canvas = document.getElementById('canvasgl');
 const gl = twgl.getContext(canvas, { depth: false, antialiasing: false });
 
 const programInfo = twgl.createProgramInfo(gl, [vert, frag]);
+const programInfoSimpleFrag = twgl.createProgramInfo(gl, [vert, simpleFrag]);
 
-const arrays = {
+const windowVertArray = twgl.createBufferInfoFromArrays(gl, {
     position: [-1, -1, 0, 1, -1, 0, -1, 1, 0, -1, 1, 0, 1, -1, 0, 1, 1, 0],
+});
+
+const megaBufOptions = {
+    width: SIDE_LENGTH,
+    height: SIDE_LENGTH,
+    internalFormat: gl.R32UI,
 };
-const bufferInfo = twgl.createBufferInfoFromArrays(gl, arrays);
 
-const tex = gl.createTexture();
-gl.bindTexture(gl.TEXTURE_2D, tex);
-gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAX_LEVEL,0);
-gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
-gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+const interRenderOptions = {
+    width: gl.canvas.width,
+    height: gl.canvas.height,
+    minMag: gl.NEAREST,
+    maxLevel: 0,
+}
 
-function render(time) {
-    twgl.resizeCanvasToDisplaySize(gl.canvas);
-    const width = gl.canvas.width;
-    const height = gl.canvas.height;
+const tex1Attachments = [{attachment: twgl.createTexture(gl, interRenderOptions)}];
+const tex2Attachments = [{attachment: twgl.createTexture(gl, interRenderOptions)}];
+const tex3Attachments = [{attachment: twgl.createTexture(gl, interRenderOptions)}];
+const interRenderFB1 = twgl.createFramebufferInfo(gl, tex1Attachments);
+const interRenderFB2 = twgl.createFramebufferInfo(gl, tex2Attachments);
+const interRenderFB3 = twgl.createFramebufferInfo(gl, tex3Attachments);
+const megaBufTex = twgl.createTexture(gl, megaBufOptions);
 
+function renderWithBackground(background, writeTo) {
     gl.viewport(0, 0, width, height);
-
     gl.useProgram(programInfo.program);
+    twgl.setUniformsAndBindTextures(programInfo, uniformInfo);
+
+    twgl.setTextureFromArray(gl, megaBufTex, megaBuff, megaBufOptions)
+    twgl.setBuffersAndAttributes(gl, programInfo, windowVertArray);
+    twgl.setUniformsAndBindTextures(programInfo, {
+        u_samp: megaBufTex,
+        u_background: background.attachments[0],
+    });
+    twgl.bindFramebufferInfo(gl, writeTo);
+    twgl.drawBufferInfo(gl, windowVertArray);
+}
+
+function splatToScreen(framebuffer) {
+    gl.viewport(0, 0, width, height);
+    gl.useProgram(programInfoSimpleFrag.program);
+    twgl.setUniformsAndBindTextures(programInfoSimpleFrag, uniformInfo);
+
+    twgl.setUniformsAndBindTextures(programInfoSimpleFrag, {
+        u_sampleTex: framebuffer.attachments[0],
+    });
+    twgl.bindFramebufferInfo(gl, null);
+    twgl.drawBufferInfo(gl, windowVertArray);
+}
+
+let currentBackground = interRenderFB1;
+let writingAndDisplaying = interRenderFB2;
+let uniformInfo = {};
+function render(time) {
+    // Pre frame
+    twgl.resizeCanvasToDisplaySize(gl.canvas);
+    if (width !== gl.canvas.width || height !== gl.canvas.height) {
+        width = gl.canvas.width;
+        height = gl.canvas.height;
+        twgl.resizeFramebufferInfo(gl, interRenderFB1, tex1Attachments, width, height);
+        twgl.resizeFramebufferInfo(gl, interRenderFB2, tex2Attachments, width, height);
+        twgl.resizeFramebufferInfo(gl, interRenderFB3, tex3Attachments, width, height);
+    }
+
+    uniformInfo = {
+        time: time,
+        resolution: [width, height],
+        mouseLocation: [mousePos.x/width, mousePos.y/height],
+        buffStartPos: megaBuffCacheUpTo,
+        brushSize: brushSettings["Brush Size"],
+        brushColor: brushSettings["Brush Color"],
+    };
+
+
+    // During frame
 
     runActions();
 
-    gl.texImage2D(
-        gl.TEXTURE_2D, 0, gl.R32UI,
-        SIDE_LENGTH, SIDE_LENGTH, 0,
-        gl.RED_INTEGER, gl.UNSIGNED_INT,
-        megaBuf
-    );
-    const loc=gl.getUniformLocation(programInfo.program,'u_samp');
-    gl.uniform1i(loc,0);
-    gl.activeTexture(gl.TEXTURE0);
-    gl.bindTexture(gl.TEXTURE_2D,tex);
+    renderWithBackground(currentBackground, writingAndDisplaying);
+    splatToScreen(writingAndDisplaying);
 
-    twgl.setBuffersAndAttributes(gl, programInfo, bufferInfo);
-    twgl.setUniforms(programInfo, {
-        time: time * 0.001,
-        resolution: [width, height],
-        mouseLocation: [mousePos.x/width, mousePos.y/height],
-    });
+    if (safeToCache) {
+        safeToCache = false;
+        [currentBackground, writingAndDisplaying] = [writingAndDisplaying, currentBackground];
+        megaBuffCacheUpTo = megaBuffPos;
+    }
 
-    twgl.drawBufferInfo(gl, bufferInfo);
+    // Post frame
     mouseWasDown = mouseDown;
+
     requestAnimationFrame(render);
 }
 
