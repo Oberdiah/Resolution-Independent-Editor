@@ -1,0 +1,9 @@
+Symmetry
+Colour wheel
+Colour picker
+Blending brush
+Fill tool
+Selection brush (Circle, rectangle)
+Magic wand
+Textured brushes
+Gaussian blur
