@@ -7,11 +7,11 @@ let brushSettings = {
 };
 
 function createBrushUI(ui) {
-    const brushFolder = ui.addFolder('Brush')
-    brushFolder.add(brushSettings, "Brush Size", 1, 100)
-    brushFolder.add(brushSettings, "Brush Weight", 0, 10)
-    brushFolder.add(brushSettings, "Brush Opacity", 0, 1)
-    brushFolder.addColor(brushSettings, "Brush Color")
+    //const brushFolder = ui.addFolder('Brush')
+    ui.add(brushSettings, "Brush Size", 1, 100)
+    ui.add(brushSettings, "Brush Weight", 0, 10)
+    ui.add(brushSettings, "Brush Opacity", 0, 1)
+    ui.addColor(brushSettings, "Brush Color")
 }
 
 function buffBrushPoint(pos) {

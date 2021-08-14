@@ -14,6 +14,7 @@ uniform usampler2D u_samp;
 uniform vec2 resolution;
 uniform vec2 mouseLocation;
 uniform float time;
+uniform float scale;
 uniform uint buffStartPos;
 uniform bool queryTexture;
 
@@ -98,11 +99,9 @@ void doBrush(vec2 pix, inout uint buffLoc, inout vec4 color) {
 }
 
 void main() {
-  vec2 uv = gl_FragCoord.xy / resolution;
-  vec2 pix = vec2(gl_FragCoord.xy);
-  vec2 mouseLoc = vec2(mouseLocation * resolution);
+  vec2 pix = vec2(gl_FragCoord.xy * scale);
 
-  vec4 color = texelFetch(u_background, ivec2(pix), 0);
+  vec4 color = texelFetch(u_background, ivec2(gl_FragCoord.xy), 0);
   float gridSize = 10.0;
 
   if (color.a == 0.0) {
