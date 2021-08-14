@@ -1,17 +1,11 @@
 let lastMousePos = {x: -1, y: -1};
-let brushSettings = {
-    "Brush Size": 30,
-    "Brush Weight": 1.9,
-    "Brush Opacity": 1.0,
-    "Brush Color": [255, 255, 255],
-};
 
 function createBrushUI(ui) {
     //const brushFolder = ui.addFolder('Brush')
-    ui.add(brushSettings, "Brush Size", 1, 100)
-    ui.add(brushSettings, "Brush Weight", 0, 5)
-    ui.add(brushSettings, "Brush Opacity", 0, 1)
-    ui.addColor(brushSettings, "Brush Color")
+    ui.add(brushSettings, "size", 1, 100).name("Brush Size")
+    ui.add(brushSettings, "weight", 0, 5).name("Brush Weight")
+    ui.add(brushSettings, "opacity", 0, 1).name("Brush Opacity")
+    ui.addColor(brushSettings, "color").name("Brush Color")
 }
 
 function buffBrushPoint(pos) {
@@ -25,12 +19,12 @@ function buffBrushFinish() {
 
 function buffBrushStart() {
     buffInt(BRUSH_START);
-    buffFloat(brushSettings["Brush Size"]);
-    buffFloat(brushSettings["Brush Weight"]);
-    buffFloat(brushSettings["Brush Opacity"]);
-    buffFloat(brushSettings["Brush Color"][0]);
-    buffFloat(brushSettings["Brush Color"][1]);
-    buffFloat(brushSettings["Brush Color"][2]);
+    buffFloat(brushSettings.size);
+    buffFloat(brushSettings.weight);
+    buffFloat(brushSettings.opacity)
+    buffFloat(brushSettings.color[0]);
+    buffFloat(brushSettings.color[1]);
+    buffFloat(brushSettings.color[2]);
 }
 
 function brush() {
@@ -49,7 +43,7 @@ function brush() {
             setTo(lastMousePos, mousePos);
         } else {
             let distBetween = dist(mousePos, lastMousePos);
-            const stepDist = brushSettings["Brush Size"]/6;
+            const stepDist = brushSettings.size/6;
             let step = mul(normalize(subtract(mousePos, lastMousePos)), stepDist);
             while (distBetween > stepDist) {
                 lastMousePos = add(lastMousePos, step);

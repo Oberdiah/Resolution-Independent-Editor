@@ -14,7 +14,6 @@ uniform usampler2D u_samp;
 
 uniform vec2 resolution;
 uniform vec2 mouseLocation;
-uniform float time;
 uniform float scale;
 uniform uint buffStartPos;
 uniform bool queryTexture;
@@ -106,21 +105,6 @@ void main() {
   vec2 pix = vec2(gl_FragCoord.xy * scale);
 
   vec4 color = texelFetch(u_background, ivec2(gl_FragCoord.xy), 0);
-  float gridSize = 10.0;
-
-  if (color.a == 0.0) {
-    // Checkerboard
-    if (mod(floor(pix / gridSize).x + floor(pix / gridSize).y, 2.0) < 1.0) {
-      color = vec4(0.1, 0.1, 0.1, 1);
-    } else {
-      color = vec4(0.0, 0.0, 0.0, 1);
-    }
-  }
-
-  // Stripes
-//  if (mod(pix.y + pix.x, gridSize) < gridSize/2.0) {
-//    color = vec4(0.1, 0.1, 0.1, 1);
-//  }
 
   ivec2 size = textureSize(u_samp, 0);
 

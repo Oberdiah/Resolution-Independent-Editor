@@ -1,11 +1,10 @@
-const fragUI = `
+const fragOverlay = `
 #version 300 es
 precision mediump float;
 precision mediump usampler2D;
 
 uniform vec2 resolution;
 uniform vec2 mouseLocation;
-uniform float time;
 uniform float scale;
 uniform float brushSize;
 uniform vec3 brushColor;
