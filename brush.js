@@ -9,7 +9,7 @@ let brushSettings = {
 function createBrushUI(ui) {
     //const brushFolder = ui.addFolder('Brush')
     ui.add(brushSettings, "Brush Size", 1, 100)
-    ui.add(brushSettings, "Brush Weight", 0, 10)
+    ui.add(brushSettings, "Brush Weight", 0, 5)
     ui.add(brushSettings, "Brush Opacity", 0, 1)
     ui.addColor(brushSettings, "Brush Color")
 }

@@ -77,6 +77,9 @@ void doBrushFinish(vec2 pix, inout uint buffLoc, inout vec4 color) {
 void doBrushStart(vec2 pix, inout uint buffLoc, inout vec4 color) {
   brushRadius = fgetBuff(buffLoc++);
   hardness = fgetBuff(buffLoc++);
+  if (hardness == 5.0) {
+    hardness = 1000.0;
+  }
   brushColor.a = fgetBuff(buffLoc++);
   brushColor.r = fgetBuff(buffLoc++)/256.0;
   brushColor.g = fgetBuff(buffLoc++)/256.0;

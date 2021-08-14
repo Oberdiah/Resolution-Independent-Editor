@@ -6,6 +6,9 @@ let height = 0;
 let camera = {
     Scale: 1,
 };
+let renderSettings = {
+    "Render Scale": 1,
+}
 let safeToCache = false;
 let renderOnNextFrame = false;
 let hoveredColor = {r: 0, g: 0, b: 0, a: 0};

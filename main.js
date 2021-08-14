@@ -6,7 +6,8 @@ createBrushUI(gui);
 gui.add({Render: () => {
     renderOnNextFrame = true;
 }}, "Render");
-gui.add(camera, "Scale", 1, 5);
+gui.add(camera, "Scale", 0.1, 1.0);
+gui.add(renderSettings, "Render Scale", 1, 10, 1);
 
 const frag = await (await fetch('frag.fs')).text();
 const simpleFrag = await (await fetch('UIFrag.fs')).text();
@@ -45,13 +46,12 @@ const megaBufOptions = {
 function createFramebuffer(width, height) {
     if (width === undefined) width = gl.canvas.width;
     if (height === undefined) height = gl.canvas.height;
-
     return twgl.createFramebufferInfo(gl, [{attachment: twgl.createTexture(gl, {
             width: width,
             height: height,
             minMag: gl.NEAREST,
             maxLevel: 0,
-        })}]);
+        })}], width, height);
 }
 
 const megaBufTex = twgl.createTexture(gl, megaBufOptions);
@@ -90,19 +90,6 @@ function splatToScreen(framebuffer) {
     });
     twgl.bindFramebufferInfo(gl, null);
     twgl.drawBufferInfo(gl, windowVertArray);
-}
-
-function download(content, filename, contentType) {
-    if(!contentType) contentType = 'application/octet-stream';
-    let blob = new Blob([content], {'type':contentType});
-    downloadURL(window.URL.createObjectURL(blob), filename)
-}
-
-function downloadURL(url, filename) {
-    let a = document.createElement('a');
-    a.href = url;
-    a.download = filename;
-    a.click();
 }
 
 function clearCache() {
@@ -158,7 +145,7 @@ function render(time) {
 
     if (renderOnNextFrame) {
         renderOnNextFrame = false;
-        const scale = 4;
+        const scale = renderSettings["Render Scale"];
         let renderWidth = width * scale;
         let renderHeight = height * scale;
         let outputArray = new Uint8ClampedArray(renderWidth * renderHeight * 4);
@@ -170,7 +157,6 @@ function render(time) {
             createFramebuffer(renderWidth, renderHeight)
         );
         gl.readPixels(0, 0, renderWidth, renderHeight, gl.RGBA, gl.UNSIGNED_BYTE, outputArray);
-        console.log(renderWidth * renderHeight * 4);
         let canvas = document.createElement("canvas");
         canvas.width = renderWidth;
         canvas.height = renderHeight;

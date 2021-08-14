@@ -1,3 +1,16 @@
+function download(content, filename, contentType) {
+    if(!contentType) contentType = 'application/octet-stream';
+    let blob = new Blob([content], {'type':contentType});
+    downloadURL(window.URL.createObjectURL(blob), filename)
+}
+
+function downloadURL(url, filename) {
+    let a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    a.click();
+}
+
 function size(a) {
     return Math.sqrt(a.x * a.x + a.y * a.y);
 }
