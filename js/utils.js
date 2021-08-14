@@ -44,6 +44,21 @@ function normalize(a) {
     return mul(a, 1/len);
 }
 
+const startText = "// ### Modes ###";
+const endText = "// ### End Modes ###";
+
+const start = fragMain.indexOf(startText) + startText.length;
+const end = fragMain.indexOf(endText);
+const split = fragMain.slice(start, end).split("\n");
+console.log(split);
+for (const s in split) {
+    const str = split[s];
+    if (str.includes("#define")) {
+        const values = str.split(" ").slice(1, 3);
+        window[values[0]] = parseInt(values[1]);
+    }
+}
+
 // megaBuf[megaBufPos++] = 10;
 // megaBuf[megaBufPos++] = 50;
 // megaBuf[megaBufPos++] = 50;
