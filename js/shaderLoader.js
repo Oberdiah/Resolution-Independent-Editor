@@ -20,6 +20,7 @@ function testIfFinished(a, content) {
             done = false;
         }
     }
+    console.log("Test if finish " + allShaders);
     if (done) {
         console.log("Finished loading ...");
         mainProgram = twgl.createProgramInfo(gl, [vertMain, fragMain])
@@ -31,8 +32,10 @@ function testIfFinished(a, content) {
 }
 
 for (let a in allShaders) {
+    console.log("Requested Shader");
     let myIFrame = document.getElementById(a);
     myIFrame.addEventListener("load", function() {
+        console.log("Received load event");
         let content = myIFrame.contentWindow.document.body
             .getElementsByTagName( 'pre' )[0]
             .innerHTML;

@@ -1,7 +1,7 @@
 const gui = new dat.GUI({name: "Cool Editor"});
 createBrushUI(gui);
-gui.add(camera, "scale", 0.1, 1.0).name("Camera Scale");
-gui.add(camera, "gridSize", 5.0, 50.0, 5.0).name("Grid Size");
+//gui.add(camera, "scale", 0.1, 1.0).name("Camera Scale");
+//gui.add(camera, "gridSize", 5.0, 50.0, 5.0).name("Grid Size");
 gui.add(renderSettings, "scale", 1, 10, 1).name("Render Scale");
 gui.add({Render: () => {
         bakeOnNextFrame = true;
@@ -56,6 +56,7 @@ function refreshUniforms() {
 
 
 function render(time) {
+    console.log("Rendered F");
     // Pre frame
     twgl.resizeCanvasToDisplaySize(gl.canvas);
 
