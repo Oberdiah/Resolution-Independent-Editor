@@ -5,7 +5,11 @@ let checkerboardProgram;
 let localFetch = '../shaders/'
 let githubFetch = 'https://raw.githubusercontent.com/Oberdiah/Resolution-Independent-Editor/master/shaders/'
 
-grabShaders(localFetch)
+ImGui.default().then(() => {
+    ImGui.CreateContext();
+    ImGui_Impl.Init(canvas);
+    grabShaders(localFetch)
+})
 
 function attemptToLoad(values, preString) {
     window.fragMain = values[0];
@@ -28,10 +32,10 @@ function attemptToLoad(values, preString) {
 function grabShaders(preString) {
     console.log("Trying " + preString);
     let allPromises = [
-        fetch(preString + 'fragMain.mjs').then(response => response.text()),
-        fetch(preString + 'fragOverlay.mjs').then(response => response.text()),
-        fetch(preString + 'fragCheckerboard.mjs').then(response => response.text()),
-        fetch(preString + 'vertMain.mjs').then(response => response.text()),
+        fetch(preString + 'fragMain.fs').then(response => response.text()),
+        fetch(preString + 'fragOverlay.fs').then(response => response.text()),
+        fetch(preString + 'fragCheckerboard.fs').then(response => response.text()),
+        fetch(preString + 'vertMain.vs').then(response => response.text()),
     ]
     Promise.all(allPromises).then((values) => {
         attemptToLoad(values, preString)

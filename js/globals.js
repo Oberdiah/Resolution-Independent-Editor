@@ -1,4 +1,7 @@
 const SIDE_LENGTH = 2000;
+const BRUSH_SIZE_MIN = 1;
+const BRUSH_SIZE_MAX = 200;
+
 const megaBuff = new Uint32Array(SIDE_LENGTH * SIDE_LENGTH);
 let megaBuffPos = 0;
 let megaBuffCacheUpTo = 0;

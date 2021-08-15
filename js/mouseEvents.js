@@ -17,6 +17,12 @@ window.addEventListener('mouseup', () => {
     mouseDown = false;
 });
 
+window.addEventListener('wheel', (event) => {
+    const delta = Math.sign(event.deltaY);
+    brushSettings.size *= 1 + (-delta * 0.2);
+    brushSettings.size = clamp(brushSettings.size, BRUSH_SIZE_MIN, BRUSH_SIZE_MAX)
+});
+
 function handleTouch(e) {
     e.preventDefault();
     mousePos.x = e.touches[0].x;

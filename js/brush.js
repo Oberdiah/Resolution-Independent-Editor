@@ -2,7 +2,7 @@ let lastMousePos = {x: -1, y: -1};
 
 function createBrushUI(ui) {
     //const brushFolder = ui.addFolder('Brush')
-    ui.add(brushSettings, "size", 1, 100).name("Brush Size")
+    ui.add(brushSettings, "size", BRUSH_SIZE_MIN, BRUSH_SIZE_MAX).name("Brush Size")
     ui.add(brushSettings, "weight", 0, 5).name("Brush Weight")
     ui.add(brushSettings, "opacity", 0, 1).name("Brush Opacity")
     ui.addColor(brushSettings, "color").name("Brush Color")

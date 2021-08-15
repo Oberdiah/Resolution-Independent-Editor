@@ -61,6 +61,10 @@ function loadDefines() {
     }
 }
 
+function clamp(num, min, max) {
+    return Math.max(min, Math.min(num, max));
+}
+
 // megaBuf[megaBufPos++] = 10;
 // megaBuf[megaBufPos++] = 50;
 // megaBuf[megaBufPos++] = 50;

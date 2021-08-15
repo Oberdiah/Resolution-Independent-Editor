@@ -54,9 +54,8 @@ function refreshUniforms() {
     };
 }
 
-
 function render(time) {
-    // Pre frame
+    // // Pre frame
     twgl.resizeCanvasToDisplaySize(gl.canvas);
 
     if (width !== gl.canvas.width || height !== gl.canvas.height) {
@@ -71,7 +70,6 @@ function render(time) {
     if (uniformInfo.scale !== camera.scale || uniformInfo.gridSize !== camera.gridSize) {
         clearCache();
     }
-
     refreshUniforms();
 
     // During frame
@@ -94,6 +92,17 @@ function render(time) {
         [currentBackground, writingAndDisplaying] = [writingAndDisplaying, currentBackground];
         megaBuffCacheUpTo = megaBuffPos;
     }
+
+    // Imgui
+
+    ImGui_Impl.NewFrame(time);
+    ImGui.NewFrame();
+    ImGui.Begin("Debug");
+    ImGui.Text(`Material`);
+    ImGui.End();
+    ImGui.EndFrame();
+    ImGui.Render();
+    ImGui_Impl.RenderDrawData(ImGui.GetDrawData());
 
     // Post frame
 

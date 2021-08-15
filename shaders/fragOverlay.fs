@@ -19,8 +19,11 @@ void main() {
     color.a = 1.0;
 
     float dist = length(vec2(pix - mouseLoc));
+
     if (dist < brushSize && dist > brushSize - 5.0) {
-        color.rgb += brushColor/256.0;
+        // Invert the color.
+        color.rgb *= -1.0;
+        color.rgb += 1.0;
     }
 
     colorOut = color;
