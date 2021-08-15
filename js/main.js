@@ -58,13 +58,6 @@ function refreshUniforms() {
     };
 }
 
-fetch('../shaders/fragCheckerboard.mjs')
-    .then(response => response.text())
-    .then(text => console.log(text));
-
-var myIFrame = document.getElementById("test.gg");
-var content = myIFrame.contentWindow.document.body.innerHTML;
-console.log("Content", content);
 
 function render(time) {
     // Pre frame
@@ -112,5 +105,3 @@ function render(time) {
 
     requestAnimationFrame(render);
 }
-
-requestAnimationFrame(render);
