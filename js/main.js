@@ -56,7 +56,6 @@ function refreshUniforms() {
 
 
 function render(time) {
-    console.log("Rendered F");
     // Pre frame
     twgl.resizeCanvasToDisplaySize(gl.canvas);
 
