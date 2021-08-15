@@ -33,14 +33,18 @@ function renderWithBackground(background, writeTo) {
     twgl.drawBufferInfo(gl, windowVertArray);
 }
 
-function splatToScreen(framebuffer) {
+function renderOverlay(background, writeTo) {
     gl.viewport(0, 0, uniformInfo.resolution[0], uniformInfo.resolution[1]);
     gl.useProgram(overlayProgram.program);
     twgl.setUniformsAndBindTextures(overlayProgram, uniformInfo);
 
     twgl.setUniformsAndBindTextures(overlayProgram, {
-        u_sampleTex: framebuffer.attachments[0],
+        u_sampleTex: background.attachments[0],
     });
-    twgl.bindFramebufferInfo(gl, null);
+    twgl.bindFramebufferInfo(gl, writeTo);
     twgl.drawBufferInfo(gl, windowVertArray);
+}
+
+function splatToScreen(background) {
+    renderOverlay(background, null);
 }

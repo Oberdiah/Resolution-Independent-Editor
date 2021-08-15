@@ -62,6 +62,9 @@ float hardness = 0.9;
 vec4 brushColor = vec4(1, 1, 1, 1);
 
 vec4 alphaComposite(vec4 under, vec4 over) {
+  if (over.a == 0.0) {
+    return under;
+  }
   float alpha = over.a + under.a * (1.0 - over.a);
   vec3 col = (over.rgb * over.a + under.rgb * under.a * (1.0 - over.a))/alpha;
   return vec4(col, alpha);

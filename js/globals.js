@@ -10,7 +10,7 @@ let width = 0;
 let height = 0;
 let camera = {
     scale: 1,
-    gridSize: 10,
+    gridSize: 20,
 };
 let renderSettings = {
     scale: 1,
