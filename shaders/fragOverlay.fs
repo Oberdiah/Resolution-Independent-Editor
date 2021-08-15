@@ -12,20 +12,7 @@ uniform float gridSize;
 uniform sampler2D u_sampleTex;
 out vec4 colorOut;
 
-vec3 pow2(vec3 a) {
-    return a * a;
-}
-
-vec4 alphaComposite(vec4 under, vec4 over) {
-    if (over.a == 0.0) {
-        return under;
-    }
-    float alpha = over.a + under.a * (1.0 - over.a);
-    // From Minute Physics - https://www.youtube.com/watch?v=LKnqECcg6Gw
-    //vec3 col = sqrt((pow2(over.rgb) * over.a + pow2(under.rgb) * under.a * (1.0 - over.a))/alpha);
-    vec3 col = ((over.rgb) * over.a + (under.rgb) * under.a * (1.0 - over.a))/alpha;
-    return vec4(col, alpha);
-}
+// ### utils.fs ###
 
 void main() {
     vec2 pix = vec2(gl_FragCoord.xy * scale);
@@ -44,7 +31,7 @@ void main() {
         color = vec4(0.0, 0.0, 0.0, 1);
     }
 
-    color = alphaComposite(color, texelFetch(u_sampleTex, ivec2(gl_FragCoord.xy), 0));
+    color = alphaCompositeTraditional(color, texelFetch(u_sampleTex, ivec2(gl_FragCoord.xy), 0));
     color.a = 1.0;
 
     float dist = length(vec2(pix - mouseLoc));

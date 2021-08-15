@@ -13,10 +13,15 @@ ImGui.default().then(() => {
 })
 
 function attemptToLoad(values, preString) {
-    window.fragMain = values[0];
-    window.fragOverlay = values[1];
-    window.vertMain = values[2];
-    if (values[0].startsWith("#version 300 es")) {
+    if (values['fragMain'].startsWith("#version 300 es")) {
+        for (let shaderName in values) {
+            let shader = values[shaderName]
+            for (let shaderName2 in values) {
+                shader = shader.replaceAll("// ### " + shaderName2 + ".fs ###", values[shaderName2])
+            }
+            window[shaderName] = shader;
+        }
+
         mainProgram = twgl.createProgramInfo(gl, [vertMain, fragMain])
         overlayProgram = twgl.createProgramInfo(gl, [vertMain, fragOverlay])
         loadDefines();
@@ -30,13 +35,17 @@ function attemptToLoad(values, preString) {
 
 function grabShaders(preString) {
     console.log("Trying " + preString);
-    let allPromises = [
-        fetch(preString + 'fragMain.fs').then(response => response.text()),
-        fetch(preString + 'fragOverlay.fs').then(response => response.text()),
-        fetch(preString + 'vertMain.vs').then(response => response.text()),
-    ]
+    let allShaders = ['vertMain', 'fragMain', 'fragOverlay', 'utils']
+
+    let allPromises = allShaders.map((e) =>
+        fetch(preString + e + '.fs').then(response => response.text())
+    );
     Promise.all(allPromises).then((values) => {
-        attemptToLoad(values, preString)
+        let map = {}
+        for (let a in values) {
+            map[allShaders[a]] = values[a]
+        }
+        attemptToLoad(map, preString)
     })
 }
 
