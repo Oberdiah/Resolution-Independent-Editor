@@ -7,20 +7,6 @@ gui.add({Render: () => {
         bakeOnNextFrame = true;
     }}, "Render");
 
-function loadTextFile(url) {
-    return fetch(url).then(response => response.text());
-}
-
-const urls = [
-    '../shaders/fragCheckerboard.fs',
-];
-
-async function main() {
-    const files = await Promise.all(urls.map(loadTextFile));
-    console.log(files[0]);
-}
-main();
-
 const canvas = document.getElementById('canvasgl');
 const gl = twgl.getContext(canvas, { depth: false, antialiasing: false });
 
@@ -71,6 +57,10 @@ function refreshUniforms() {
         gridSize: camera.gridSize,
     };
 }
+
+var myIFrame = document.getElementById("test.gg");
+var content = myIFrame.contentWindow.document.body.innerHTML;
+console.log(content);
 
 function render(time) {
     // Pre frame
