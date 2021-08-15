@@ -8,6 +8,7 @@ uniform float scale;
 uniform float brushSize;
 uniform vec3 brushColor;
 uniform float gridSize;
+uniform int currentTool;
 
 uniform sampler2D u_sampleTex;
 out vec4 colorOut;
@@ -36,10 +37,12 @@ void main() {
 
     float dist = length(vec2(pix - mouseLoc));
 
-    if (dist < brushSize && dist > brushSize - 5.0) {
-        // Invert the color.
-        color.rgb *= -1.0;
-        color.rgb += 1.0;
+    if (currentTool == TOOL_BRUSH || currentTool == TOOL_ERASER) {
+        if (dist < brushSize && dist > brushSize - 5.0) {
+            // Invert the color.
+            color.rgb *= -1.0;
+            color.rgb += 1.0;
+        }
     }
 
     colorOut = color;

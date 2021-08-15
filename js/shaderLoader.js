@@ -25,6 +25,7 @@ function attemptToLoad(values, preString) {
         mainProgram = twgl.createProgramInfo(gl, [vertMain, fragMain])
         overlayProgram = twgl.createProgramInfo(gl, [vertMain, fragOverlay])
         loadDefines();
+        initConstants();
         requestAnimationFrame(render);
     } else {
         if (preString === localFetch) {

@@ -48,9 +48,9 @@ function loadDefines() {
     const startText = "// ### Modes ###";
     const endText = "// ### End Modes ###";
 
-    const start = fragMain.indexOf(startText) + startText.length;
-    const end = fragMain.indexOf(endText);
-    const split = fragMain.slice(start, end).split("\n");
+    const start = utils.indexOf(startText) + startText.length;
+    const end = utils.indexOf(endText);
+    const split = utils.slice(start, end).split("\n");
 
     for (const s in split) {
         const str = split[s];

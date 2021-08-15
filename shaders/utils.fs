@@ -1,3 +1,17 @@
+// ### Modes ###
+
+#define TOOL_BRUSH 1
+#define TOOL_ERASER 2
+#define TOOL_FLOOD_FILL 3
+#define TOOL_COLOR_PICK 4
+
+#define BRUSH_START 10
+#define BRUSH_POINT 20
+#define BRUSH_FINISH 30
+#define FLOOD_FILL 40
+
+// ### End Modes ###
+
 float sdSegment( in vec2 p, in vec2 a, in vec2 b ) {
     vec2 pa = p-a, ba = b-a;
     float h = clamp( dot(pa,ba)/dot(ba,ba), 0.0, 1.0 );

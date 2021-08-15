@@ -13,6 +13,15 @@ const megaBufOptions = {
 
 const megaBufTex = twgl.createTexture(gl, megaBufOptions);
 
+function updateHoveredColor() {
+    let hoveredArr = new Uint8Array(4);
+    gl.readPixels(mousePos.x, mousePos.y, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, hoveredArr);
+    s_hoveredColor[0][0] = hoveredArr[0]/256.0
+    s_hoveredColor[0][1] = hoveredArr[1]/256.0
+    s_hoveredColor[0][2] = hoveredArr[2]/256.0
+    s_hoveredColor[0][3] = hoveredArr[3]/256.0
+}
+
 function clearCache() {
     megaBuffCacheUpTo = 0;
     twgl.setEmptyTexture(gl, currentCache.attachments[0], {width: width, height: height});
@@ -41,6 +50,7 @@ function refreshUniforms() {
         brushColor: s_brushColor[0],
         scale: camera.scale,
         gridSize: camera.gridSize,
+        currentTool: getCurrentTool(),
     };
 }
 
@@ -65,10 +75,12 @@ function render(time) {
     // During frame
 
     brush();
+    floodFill();
+    colorPick();
 
     renderWithBackground(currentCache, writingAndDisplaying);
 
-    gl.readPixels(mousePos.x, mousePos.y, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, hoveredColor);
+    updateHoveredColor()
 
     splatToScreen(writingAndDisplaying);
 

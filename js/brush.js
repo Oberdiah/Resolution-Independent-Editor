@@ -9,30 +9,26 @@ function buffBrushFinish() {
     buffInt(BRUSH_FINISH);
 }
 
-function buffBrushStart(useAltColor) {
+function buffBrushStart() {
     buffInt(BRUSH_START);
     buffFloat(s_brushSize[0]);
     buffFloat(s_brushWeight[0]);
-    if (s_currentTool[0] === "Brush") {
+    buffBrushColor()
+    if (getCurrentTool() === TOOL_BRUSH) {
         buffFloat(s_brushOpacity[0]);
-    } else if (s_currentTool[0] === "Eraser") {
+    } else if (getCurrentTool() === TOOL_ERASER) {
         buffFloat(-s_brushOpacity[0]);
-    }
-    if (!useAltColor) {
-        buffFloat(s_brushColor[0][0]);
-        buffFloat(s_brushColor[0][1]);
-        buffFloat(s_brushColor[0][2]);
-    } else {
-        buffFloat(s_brushAltColor[0][0]);
-        buffFloat(s_brushAltColor[0][1]);
-        buffFloat(s_brushAltColor[0][2]);
     }
 }
 
 function brush() {
+    if (getCurrentTool() !== TOOL_BRUSH && getCurrentTool() !== TOOL_ERASER) {
+        return;
+    }
+
     // Mouse down
     if (buttonsPressed !== 0 && lastButtonsPressed === 0) {
-        buffBrushStart(buttonsPressed === 2);
+        buffBrushStart();
     }
 
     // Drag

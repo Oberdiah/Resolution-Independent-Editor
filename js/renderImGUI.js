@@ -7,6 +7,7 @@ function renderImGUI() {
     autoImgui(s_brushWeight)
     autoImgui(s_brushColor)
     autoImgui(s_brushAltColor)
+    //autoImgui(s_hoveredColor)
     autoImgui(s_currentTool)
 
     ImGui.Separator()
@@ -33,7 +34,7 @@ function autoImgui(q) {
         }
     } else if (Array.isArray(q[0])) {
         let l = q[0].length
-        if (l === 3) {
+        if (l === 3 || l === 4) {
             ImGui.ColorEdit3(q[1], q[0]);
         } else {
             console.log("No auto imgui for arrays of length " + l)

@@ -16,6 +16,16 @@ let camera = {
     gridSize: 10,
 };
 
+let toolMap;
+function initConstants() {
+    toolMap = {
+        "Brush": TOOL_BRUSH,
+        "Eraser": TOOL_ERASER,
+        "Fill Bucket": TOOL_FLOOD_FILL,
+        "Colour Pick": TOOL_COLOR_PICK
+    }
+}
+
 let usingAltColor = false;
 
 let s_brushSize = [30, "Brush Size", BRUSH_SIZE_MIN, BRUSH_SIZE_MAX]
@@ -23,8 +33,13 @@ let s_brushWeight = [1.9, "Brush Weight", 0.1, 5.0]
 let s_brushOpacity = [1.0, "Brush Opacity", 0.001, 1.0]
 let s_brushColor = [[1.0, 1.0, 1.0], "Brush Color"]
 let s_brushAltColor = [[1.0, 1.0, 1.0], "Brush Alt Color"]
+let s_hoveredColor = [[1.0, 1.0, 1.0, 1.0], "Hovered Color"]
 let s_renderScale = [1, "Render Scale", 1, 8]
-let s_currentTool = ["Brush", "Tool", ["Brush", "Eraser", "Fill bucket", "Colour Pick"]]
+
+function getCurrentTool() {
+    return toolMap[s_currentTool[0]];
+}
+
+let s_currentTool = ["Brush", "Tool", ["Brush", "Eraser", "Fill Bucket", "Colour Pick"]]
 let safeToCache = false;
 let bakeOnNextFrame = false;
-let hoveredColor = new Uint8Array(4);

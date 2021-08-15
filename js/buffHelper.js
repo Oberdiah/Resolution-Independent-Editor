@@ -31,3 +31,17 @@ function sneakBuffInt(i) {
 function sneakBuffFloat(f) {
     sneakBuffInt(f*256);
 }
+
+function buffColor(color) {
+    buffFloat(color[0]);
+    buffFloat(color[1]);
+    buffFloat(color[2]);
+}
+
+function buffBrushColor() {
+    if (buttonsPressed === 1) {
+        buffColor(s_brushColor[0])
+    } else {
+        buffColor(s_brushAltColor[0])
+    }
+}

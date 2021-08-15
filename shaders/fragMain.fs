@@ -2,12 +2,6 @@
 precision mediump float;
 precision mediump usampler2D;
 
-// ### Modes ###
-#define BRUSH_START 10
-#define BRUSH_POINT 20
-#define BRUSH_FINISH 30
-// ### End Modes ###
-
 uniform sampler2D u_background;
 uniform usampler2D u_samp;
 
@@ -33,10 +27,28 @@ float fgetBuff(uint buffLoc) {
   return float(igetBuff(buffLoc)) / 256.0;
 }
 
+vec4 colorGetBuff(inout uint buffLoc) {
+  vec4 toRet = vec4(0);
+  toRet.r = fgetBuff(buffLoc++);
+  toRet.g = fgetBuff(buffLoc++);
+  toRet.b = fgetBuff(buffLoc++);
+  toRet.a = fgetBuff(buffLoc++);
+  return toRet;
+}
+
 float currentOpacity = 0.0;
 float brushRadius = 50.0;
 float hardness = 0.9;
 vec4 brushColor = vec4(1, 1, 1, 1);
+
+void doFloodFill(vec2 pix, inout uint buffLoc, inout vec4 color) {
+  brushColor = colorGetBuff(buffLoc);
+  vec4 floodColor = colorGetBuff(buffLoc);
+
+  if (length(color - floodColor) < 0.3) {
+    color = alphaComposite(color, brushColor);
+  }
+}
 
 void doBrushFinish(vec2 pix, inout uint buffLoc, inout vec4 color) {
   if (brushColor.a > 0.0) {
@@ -59,10 +71,8 @@ void doBrushStart(vec2 pix, inout uint buffLoc, inout vec4 color) {
     hardness = 1000.0;
   }
   // A brush alpha of < 0.0 and > -1.0 means erase.
-  brushColor.a = fgetBuff(buffLoc++);
-  brushColor.r = fgetBuff(buffLoc++);
-  brushColor.g = fgetBuff(buffLoc++);
-  brushColor.b = fgetBuff(buffLoc++);
+
+  brushColor = colorGetBuff(buffLoc);
 }
 
 void doBrush(vec2 pix, inout uint buffLoc, inout vec4 color) {
@@ -96,6 +106,8 @@ void main() {
       doBrushFinish(pix, buffLoc, color);
     } else if (val == BRUSH_START) {
       doBrushStart(pix, buffLoc, color);
+    } else if (val == FLOOD_FILL) {
+      doFloodFill(pix, buffLoc, color);
     } else {
       break;
     }
