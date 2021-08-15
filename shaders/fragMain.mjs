@@ -32,7 +32,6 @@ float line0(vec2 p, vec2 a,vec2 b) {
   return h==c ? length(p - b * h) : 1e5;            // dist to strict segment
 }
 
-
 float opSmoothUnion( float d1, float d2, float k ) {
   float h = clamp( 0.5 + 0.5*(d2-d1)/k, 0.0, 1.0 );
   return mix( d2, d1, h ) - k*h*(1.0-h);
@@ -41,7 +40,6 @@ float opSmoothUnion( float d1, float d2, float k ) {
 float easeInOutSine(float x) {
   return -(cos(3.1415 * x) - 1.0) / 2.0;
 }
-
 
 uint getBuff(uint buffLoc) {
   return texelFetch(u_samp, ivec2(buffLoc%2000u,buffLoc/2000u), 0).x;
