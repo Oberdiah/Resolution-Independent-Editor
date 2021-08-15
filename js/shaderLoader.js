@@ -4,9 +4,11 @@ let checkerboardProgram;
 
 let localFetch = '../shaders/'
 let githubFetch = 'https://raw.githubusercontent.com/Oberdiah/Resolution-Independent-Editor/master/shaders/'
+let io;
 
 ImGui.default().then(() => {
     ImGui.CreateContext();
+    io = ImGui.GetIO();
     ImGui_Impl.Init(canvas);
     grabShaders(localFetch)
 })

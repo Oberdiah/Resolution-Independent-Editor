@@ -100,6 +100,9 @@ function render(time) {
     ImGui.Begin("Debug");
     ImGui.Text(`Material`);
     ImGui.End();
+    ImGui.Begin("Layers");
+    ImGui.Text(`Test`);
+    ImGui.End();
     ImGui.EndFrame();
     ImGui.Render();
     ImGui_Impl.RenderDrawData(ImGui.GetDrawData());

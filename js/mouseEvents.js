@@ -10,17 +10,23 @@ canvas.addEventListener('mouseleave', () => {
 });
 
 canvas.addEventListener('mousedown', e => {
-    mouseDown = true;
+    if (!io.WantCaptureMouse) {
+        mouseDown = true;
+    }
 });
 
 window.addEventListener('mouseup', () => {
-    mouseDown = false;
+    if (!io.WantCaptureMouse) {
+        mouseDown = false;
+    }
 });
 
 window.addEventListener('wheel', (event) => {
-    const delta = Math.sign(event.deltaY);
-    brushSettings.size *= 1 + (-delta * 0.2);
-    brushSettings.size = clamp(brushSettings.size, BRUSH_SIZE_MIN, BRUSH_SIZE_MAX)
+    if (!io.WantCaptureMouse) {
+        const delta = Math.sign(event.deltaY);
+        brushSettings.size *= 1 + (-delta * 0.2);
+        brushSettings.size = clamp(brushSettings.size, BRUSH_SIZE_MIN, BRUSH_SIZE_MAX)
+    }
 });
 
 function handleTouch(e) {
