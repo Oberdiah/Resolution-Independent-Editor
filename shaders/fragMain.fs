@@ -53,7 +53,7 @@ float fgetBuff(uint buffLoc) {
   return float(igetBuff(buffLoc)) / 256.0;
 }
 
-vec3 sqr(vec3 a) {
+vec3 pow2(vec3 a) {
   return a * a;
 }
 
@@ -68,21 +68,21 @@ vec4 alphaComposite(vec4 under, vec4 over) {
   }
   float alpha = over.a + under.a * (1.0 - over.a);
   // From Minute Physics - https://www.youtube.com/watch?v=LKnqECcg6Gw
-  vec3 col = sqrt((sqr(over.rgb) * over.a + sqr(under.rgb) * under.a * (1.0 - over.a))/alpha);
+  vec3 col = sqrt((pow2(over.rgb) * over.a + pow2(under.rgb) * under.a * (1.0 - over.a))/alpha);
 //  vec3 col = ((over.rgb) * over.a + (under.rgb) * under.a * (1.0 - over.a))/alpha;
   return vec4(col, alpha);
 }
 
 void doBrushFinish(vec2 pix, inout uint buffLoc, inout vec4 color) {
-//  if (brushColor.a > 0.0) {
-  vec4 newCol = vec4(brushColor.rgb, brushColor.a * currentOpacity);
-  color = alphaComposite(color, newCol);
-//  } else {
-//    color.a += brushColor.a;
-//    if (color.a <= 0.0) {
-//      color.rgba = vec4(0);
-//    }
-//  }
+  if (brushColor.a > 0.0) {
+    vec4 newCol = vec4(brushColor.rgb, brushColor.a * currentOpacity);
+    color = alphaComposite(color, newCol);
+  } else {
+    color.a += brushColor.a * currentOpacity;
+    if (color.a <= 0.0) {
+      color.rgba = vec4(0);
+    }
+  }
 
   currentOpacity = 0.0;
 }

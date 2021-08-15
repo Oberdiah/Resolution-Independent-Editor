@@ -13,7 +13,7 @@ let width = 0;
 let height = 0;
 let camera = {
     scale: 1,
-    gridSize: 20,
+    gridSize: 10,
 };
 
 let usingAltColor = false;

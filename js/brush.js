@@ -13,7 +13,11 @@ function buffBrushStart(useAltColor) {
     buffInt(BRUSH_START);
     buffFloat(s_brushSize[0]);
     buffFloat(s_brushWeight[0]);
-    buffFloat(s_brushOpacity[0]);
+    if (s_currentTool[0] === "Brush") {
+        buffFloat(s_brushOpacity[0]);
+    } else if (s_currentTool[0] === "Eraser") {
+        buffFloat(-s_brushOpacity[0]);
+    }
     if (!useAltColor) {
         buffFloat(s_brushColor[0][0]);
         buffFloat(s_brushColor[0][1]);

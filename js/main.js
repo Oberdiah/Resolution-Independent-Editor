@@ -15,9 +15,8 @@ const megaBufTex = twgl.createTexture(gl, megaBufOptions);
 
 function clearCache() {
     megaBuffCacheUpTo = 0;
-    twgl.setEmptyTexture(gl, currentBackground.attachments[0], {width: width, height: height});
+    twgl.setEmptyTexture(gl, currentCache.attachments[0], {width: width, height: height});
     refreshUniforms();
-    renderCheckerboard(currentBackground);
 
     // Note to self, could be dangerous
     // Longer term, should render up to whatever megaBuffCacheUpTo used to be
@@ -29,7 +28,7 @@ const interRenderFB1 = createFramebuffer();
 const interRenderFB2 = createFramebuffer();
 const interRenderFB3 = createFramebuffer();
 
-let currentBackground = interRenderFB1;
+let currentCache = interRenderFB1;
 let writingAndDisplaying = interRenderFB2;
 let uniformInfo = {};
 
@@ -67,7 +66,7 @@ function render(time) {
 
     brush();
 
-    renderWithBackground(currentBackground, writingAndDisplaying);
+    renderWithBackground(currentCache, writingAndDisplaying);
 
     gl.readPixels(mousePos.x, mousePos.y, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, hoveredColor);
 
@@ -80,7 +79,7 @@ function render(time) {
 
     if (safeToCache) {
         safeToCache = false;
-        [currentBackground, writingAndDisplaying] = [writingAndDisplaying, currentBackground];
+        [currentCache, writingAndDisplaying] = [writingAndDisplaying, currentCache];
         megaBuffCacheUpTo = megaBuffPos;
     }
 
