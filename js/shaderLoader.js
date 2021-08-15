@@ -12,7 +12,7 @@ function attemptToLoad(values, preString) {
     window.fragOverlay = values[1];
     window.fragCheckerboard = values[2];
     window.vertMain = values[3];
-    if (values[0] !== '') {
+    if (values[0].startsWith("#version 300 es")) {
         mainProgram = twgl.createProgramInfo(gl, [vertMain, fragMain])
         overlayProgram = twgl.createProgramInfo(gl, [vertMain, fragOverlay])
         checkerboardProgram = twgl.createProgramInfo(gl, [vertMain, fragCheckerboard])
