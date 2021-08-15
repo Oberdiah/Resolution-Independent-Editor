@@ -53,6 +53,10 @@ float fgetBuff(uint buffLoc) {
   return float(igetBuff(buffLoc)) / 256.0;
 }
 
+vec3 sqr(vec3 a) {
+  return a * a;
+}
+
 float currentOpacity = 0.0;
 float brushRadius = 50.0;
 float hardness = 0.9;
@@ -63,13 +67,22 @@ vec4 alphaComposite(vec4 under, vec4 over) {
     return under;
   }
   float alpha = over.a + under.a * (1.0 - over.a);
-  vec3 col = (over.rgb * over.a + under.rgb * under.a * (1.0 - over.a))/alpha;
+  // From Minute Physics - https://www.youtube.com/watch?v=LKnqECcg6Gw
+  vec3 col = sqrt((sqr(over.rgb) * over.a + sqr(under.rgb) * under.a * (1.0 - over.a))/alpha);
+//  vec3 col = ((over.rgb) * over.a + (under.rgb) * under.a * (1.0 - over.a))/alpha;
   return vec4(col, alpha);
 }
 
 void doBrushFinish(vec2 pix, inout uint buffLoc, inout vec4 color) {
+//  if (brushColor.a > 0.0) {
   vec4 newCol = vec4(brushColor.rgb, brushColor.a * currentOpacity);
   color = alphaComposite(color, newCol);
+//  } else {
+//    color.a += brushColor.a;
+//    if (color.a <= 0.0) {
+//      color.rgba = vec4(0);
+//    }
+//  }
 
   currentOpacity = 0.0;
 }
@@ -80,10 +93,11 @@ void doBrushStart(vec2 pix, inout uint buffLoc, inout vec4 color) {
   if (hardness == 5.0) {
     hardness = 1000.0;
   }
+  // A brush alpha of < 0.0 and > -1.0 means erase.
   brushColor.a = fgetBuff(buffLoc++);
-  brushColor.r = fgetBuff(buffLoc++)/256.0;
-  brushColor.g = fgetBuff(buffLoc++)/256.0;
-  brushColor.b = fgetBuff(buffLoc++)/256.0;
+  brushColor.r = fgetBuff(buffLoc++);
+  brushColor.g = fgetBuff(buffLoc++);
+  brushColor.b = fgetBuff(buffLoc++);
 }
 
 void doBrush(vec2 pix, inout uint buffLoc, inout vec4 color) {

@@ -1,7 +1,7 @@
 
 
 function bakeToDisk() {
-    const scale = renderSettings.scale;
+    const scale = s_renderScale[0];
     let renderWidth = width * scale;
     let renderHeight = height * scale;
     uniformInfo.scale = 1/scale;

@@ -6,26 +6,26 @@ canvas.addEventListener('mousemove', (e) => {
 canvas.addEventListener('mouseleave', () => {
     // mousePos.x = gl.canvas.clientWidth * 0.5;
     // mousePos.y = gl.canvas.clientHeight * 0.5;
-    mouseDown = false;
+    buttonsPressed = 0;
 });
 
 canvas.addEventListener('mousedown', e => {
     if (!io.WantCaptureMouse) {
-        mouseDown = true;
+        buttonsPressed = e.buttons;
     }
 });
 
 window.addEventListener('mouseup', () => {
     if (!io.WantCaptureMouse) {
-        mouseDown = false;
+        buttonsPressed = 0;
     }
 });
 
 window.addEventListener('wheel', (event) => {
     if (!io.WantCaptureMouse) {
         const delta = Math.sign(event.deltaY);
-        brushSettings.size *= 1 + (-delta * 0.2);
-        brushSettings.size = clamp(brushSettings.size, BRUSH_SIZE_MIN, BRUSH_SIZE_MAX)
+        s_brushSize[0] *= 1 + (-delta * 0.2);
+        s_brushSize[0] = clamp(s_brushSize[0], BRUSH_SIZE_MIN, BRUSH_SIZE_MAX)
     }
 });
 

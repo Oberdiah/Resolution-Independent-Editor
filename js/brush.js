@@ -1,13 +1,5 @@
 let lastMousePos = {x: -1, y: -1};
 
-function createBrushUI(ui) {
-    //const brushFolder = ui.addFolder('Brush')
-    ui.add(brushSettings, "size", BRUSH_SIZE_MIN, BRUSH_SIZE_MAX).name("Brush Size")
-    ui.add(brushSettings, "weight", 0, 5).name("Brush Weight")
-    ui.add(brushSettings, "opacity", 0, 1).name("Brush Opacity")
-    ui.addColor(brushSettings, "color").name("Brush Color")
-}
-
 function buffBrushPoint(pos) {
     buffInt(BRUSH_POINT);
     buffPos(pos);
@@ -17,24 +9,30 @@ function buffBrushFinish() {
     buffInt(BRUSH_FINISH);
 }
 
-function buffBrushStart() {
+function buffBrushStart(useAltColor) {
     buffInt(BRUSH_START);
-    buffFloat(brushSettings.size);
-    buffFloat(brushSettings.weight);
-    buffFloat(brushSettings.opacity)
-    buffFloat(brushSettings.color[0]);
-    buffFloat(brushSettings.color[1]);
-    buffFloat(brushSettings.color[2]);
+    buffFloat(s_brushSize[0]);
+    buffFloat(s_brushWeight[0]);
+    buffFloat(s_brushOpacity[0]);
+    if (!useAltColor) {
+        buffFloat(s_brushColor[0][0]);
+        buffFloat(s_brushColor[0][1]);
+        buffFloat(s_brushColor[0][2]);
+    } else {
+        buffFloat(s_brushAltColor[0][0]);
+        buffFloat(s_brushAltColor[0][1]);
+        buffFloat(s_brushAltColor[0][2]);
+    }
 }
 
 function brush() {
     // Mouse down
-    if (mouseDown && !mouseWasDown) {
-        buffBrushStart();
+    if (buttonsPressed !== 0 && lastButtonsPressed === 0) {
+        buffBrushStart(buttonsPressed === 2);
     }
 
     // Drag
-    if (mouseDown) {
+    if (buttonsPressed !== 0) {
         if (lastMousePos.x === -1) {
             for (let i = 0; i < 2; i++) {
                 buffBrushPoint(mousePos);
@@ -43,7 +41,7 @@ function brush() {
             setTo(lastMousePos, mousePos);
         } else {
             let distBetween = dist(mousePos, lastMousePos);
-            const stepDist = brushSettings.size/6;
+            const stepDist = s_brushSize[0]/6;
             let step = mul(normalize(subtract(mousePos, lastMousePos)), stepDist);
             while (distBetween > stepDist) {
                 lastMousePos = add(lastMousePos, step);
@@ -55,7 +53,7 @@ function brush() {
     }
 
     // Mouse up
-    if (!mouseDown && mouseWasDown) {
+    if (buttonsPressed === 0 && lastButtonsPressed !== 0) {
         buffBrushFinish();
         lastMousePos.x = -1;
         safeToCache = true;

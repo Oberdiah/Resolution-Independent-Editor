@@ -1,12 +1,3 @@
-const gui = new dat.GUI({name: "Cool Editor"});
-createBrushUI(gui);
-//gui.add(camera, "scale", 0.1, 1.0).name("Camera Scale");
-//gui.add(camera, "gridSize", 5.0, 50.0, 5.0).name("Grid Size");
-gui.add(renderSettings, "scale", 1, 10, 1).name("Render Scale");
-gui.add({Render: () => {
-        bakeOnNextFrame = true;
-    }}, "Render");
-
 const canvas = document.getElementById('canvasgl');
 const gl = twgl.getContext(canvas, { depth: false, antialiasing: false });
 
@@ -47,8 +38,8 @@ function refreshUniforms() {
         resolution: [width, height],
         mouseLocation: [mousePos.x/width, mousePos.y/height],
         buffStartPos: megaBuffCacheUpTo,
-        brushSize: brushSettings.size,
-        brushColor: brushSettings.color,
+        brushSize: s_brushSize[0],
+        brushColor: s_brushColor[0],
         scale: camera.scale,
         gridSize: camera.gridSize,
     };
@@ -97,19 +88,14 @@ function render(time) {
 
     ImGui_Impl.NewFrame(time);
     ImGui.NewFrame();
-    ImGui.Begin("Debug");
-    ImGui.Text(`Material`);
-    ImGui.End();
-    ImGui.Begin("Layers");
-    ImGui.Text(`Test`);
-    ImGui.End();
+    renderImGUI();
     ImGui.EndFrame();
     ImGui.Render();
     ImGui_Impl.RenderDrawData(ImGui.GetDrawData());
 
     // Post frame
 
-    mouseWasDown = mouseDown;
+    lastButtonsPressed = buttonsPressed;
 
     requestAnimationFrame(render);
 }
