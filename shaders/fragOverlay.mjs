@@ -1,4 +1,3 @@
-const fragOverlay = `
 #version 300 es
 precision mediump float;
 precision mediump usampler2D;
@@ -26,4 +25,3 @@ void main() {
 
     colorOut = color;
 }
-`

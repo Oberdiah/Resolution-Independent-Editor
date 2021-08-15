@@ -1,11 +1,18 @@
+// This is absolute insanity, but it's insanity that works.
+let mainProgram;
+let overlayProgram;
+let checkerboardProgram;
+
 let allShaders = {
     "fragCheckerboard": false,
     "fragMain": false,
+    "fragOverlay": false,
+    "vertMain": false,
 };
 
 function testIfFinished(a, content) {
     allShaders[a] = true;
-    console.log(content);
+    window[a] = content;
 
     let done = true;
     for (let f in allShaders) {
@@ -15,6 +22,10 @@ function testIfFinished(a, content) {
     }
     if (done) {
         console.log("Finished loading ...");
+        mainProgram = twgl.createProgramInfo(gl, [vertMain, fragMain])
+        overlayProgram = twgl.createProgramInfo(gl, [vertMain, fragOverlay])
+        checkerboardProgram = twgl.createProgramInfo(gl, [vertMain, fragCheckerboard])
+        loadDefines();
         requestAnimationFrame(render);
     }
 }
@@ -24,6 +35,9 @@ for (let a in allShaders) {
     myIFrame.addEventListener("load", function() {
         let content = myIFrame.contentWindow.document.body.innerHTML;
         content = content.substr(5, content.length - 11);
+        content = content.replaceAll("&lt;", "<");
+        content = content.replaceAll("&gt;", ">");
+        content = content.replaceAll("&amp;", "&");
         testIfFinished(a, content);
     });
 }

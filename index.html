@@ -8,21 +8,23 @@
           margin: 0;
           font-family: monospace;
       }
+      iframe.hidden
+      {
+        display:none
+      }
     </style>
   </head>
 
   <body>
     <canvas id="canvasgl" style="height: 100vh; width: 100vw; display: block;"></canvas>
   </body>
-  <iframe id="fragCheckerboard" src="shaders/fragCheckerboard.mjs"></iframe>
-  <iframe id="fragMain" src="shaders/fragMain.mjs"></iframe>
+  <iframe id="fragCheckerboard" src="shaders/fragCheckerboard.mjs" class="hidden"></iframe>
+  <iframe id="fragMain" src="shaders/fragMain.mjs" class="hidden"></iframe>
+  <iframe id="fragOverlay" src="shaders/fragOverlay.mjs" class="hidden"></iframe>
+  <iframe id="vertMain" src="shaders/vertMain.mjs" class="hidden"></iframe>
   <script src="lib/twgl.js"></script>
   <script src="lib/dat.gui.js"></script>
   <script src="js/shaderLoader.js"></script>
-  <script src="shaders/fragMain.js"></script>
-  <script src="shaders/fragOverlay.js"></script>
-  <script src="shaders/fragCheckerboard.js"></script>
-  <script src="shaders/vertMain.js"></script>
   <script src="js/globals.js"></script>
   <script src="js/utils.js"></script>
   <script src="js/renderingUtils.js"></script>

@@ -10,10 +10,6 @@ gui.add({Render: () => {
 const canvas = document.getElementById('canvasgl');
 const gl = twgl.getContext(canvas, { depth: false, antialiasing: false });
 
-const mainProgram = twgl.createProgramInfo(gl, [vertMain, fragMain]);
-const overlayProgram = twgl.createProgramInfo(gl, [vertMain, fragOverlay]);
-const checkerboardProgram = twgl.createProgramInfo(gl, [vertMain, fragCheckerboard]);
-
 const windowVertArray = twgl.createBufferInfoFromArrays(gl, {
     position: [-1, -1, 0, 1, -1, 0, -1, 1, 0, -1, 1, 0, 1, -1, 0, 1, 1, 0],
 });
