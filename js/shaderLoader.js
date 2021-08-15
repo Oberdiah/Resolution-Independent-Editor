@@ -33,8 +33,9 @@ function testIfFinished(a, content) {
 for (let a in allShaders) {
     let myIFrame = document.getElementById(a);
     myIFrame.addEventListener("load", function() {
-        let content = myIFrame.contentWindow.document.body.innerHTML;
-        content = content.substr(5, content.length - 11);
+        let content = myIFrame.contentWindow.document.body
+            .getElementsByTagName( 'pre' )[0]
+            .innerHTML;
         content = content.replaceAll("&lt;", "<");
         content = content.replaceAll("&gt;", ">");
         content = content.replaceAll("&amp;", "&");
