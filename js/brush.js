@@ -14,11 +14,6 @@ function buffBrushStart() {
     buffFloat(s_brushSize[0]);
     buffFloat(s_brushWeight[0]);
     buffBrushColor()
-    if (getCurrentTool() === TOOL_BRUSH) {
-        buffFloat(s_brushOpacity[0]);
-    } else if (getCurrentTool() === TOOL_ERASER) {
-        buffFloat(-s_brushOpacity[0]);
-    }
 }
 
 function brush() {

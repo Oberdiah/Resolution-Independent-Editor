@@ -32,16 +32,17 @@ function sneakBuffFloat(f) {
     sneakBuffInt(f*256);
 }
 
-function buffColor(color) {
+function buffColor(color, invert = false) {
     buffFloat(color[0]);
     buffFloat(color[1]);
     buffFloat(color[2]);
+    buffFloat(invert ? -color[3] : color[3]);
 }
 
 function buffBrushColor() {
     if (buttonsPressed === 1) {
-        buffColor(s_brushColor[0])
+        buffColor(s_brushColor[0], getCurrentTool() === TOOL_ERASER)
     } else {
-        buffColor(s_brushAltColor[0])
+        buffColor(s_brushAltColor[0], getCurrentTool() === TOOL_ERASER)
     }
 }

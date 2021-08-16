@@ -3,7 +3,6 @@
 function renderImGUI() {
     ImGui.Begin("Settings");
     autoImgui(s_brushSize)
-    autoImgui(s_brushOpacity)
     autoImgui(s_brushWeight)
     autoImgui(s_brushColor)
     autoImgui(s_brushAltColor)
@@ -34,8 +33,10 @@ function autoImgui(q) {
         }
     } else if (Array.isArray(q[0])) {
         let l = q[0].length
-        if (l === 3 || l === 4) {
+        if (l === 3) {
             ImGui.ColorEdit3(q[1], q[0]);
+        } else if (l === 4) {
+            ImGui.ColorEdit4(q[1], q[0]);
         } else {
             console.log("No auto imgui for arrays of length " + l)
         }
